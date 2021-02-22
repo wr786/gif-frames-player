@@ -5,6 +5,9 @@ import { render } from '@testing-library/react';
 import { Image, Button, Space } from 'antd';
 import { Layout, Menu, Breadcrumb } from 'antd';
 import { Typography } from 'antd';
+import { Tooltip } from 'antd';
+import { LeftOutlined, RightOutlined, CaretRightOutlined } from '@ant-design/icons';
+import { Row, Col } from 'antd';
 
 const { Header, Content, Footer } = Layout;
 const { Title, Link } = Typography;
@@ -13,10 +16,41 @@ class ImageBox extends React.Component {
   render() { 
     return (
     <Image
-      width={200}
+      width={260}
       src={this.props.src}
     />
   );}
+}
+
+class RecButton extends React.Component {
+  render() {
+    return (
+      <Tooltip title={this.props.title}>
+        <Button className="my-button" type="primary" shape="circle" icon={this.props.icon} style={this.props.style} />
+      </Tooltip>
+    )
+  }
+}
+
+class ButtonList extends React.Component {
+  render() {
+    return (
+      <div className="icons-list">
+        <RecButton 
+          title="Prev Frame" 
+          icon={<LeftOutlined />}
+        />
+        <RecButton 
+          title="Play" 
+          icon={<CaretRightOutlined />}
+        />
+        <RecButton 
+          title="Next Frame" 
+          icon={<RightOutlined />}
+        />
+      </div>
+    )
+  }
 }
 
 class MainPage extends React.Component {
@@ -51,7 +85,18 @@ class MainPage extends React.Component {
           <Title><div className="white-text">GIF Frames Player</div></Title>
         </Header>
         <Content style={{ padding: '0 50px' }}>
-          <div className="site-layout-content"><ImageBox src={src} /></div>
+          <div className="site-layout-content">
+            <Row type="flex" justify="center" align="middle">
+              <Col>
+                <ImageBox src={src}/> 
+              </Col>
+            </Row>
+            <Row type="flex" justify="center" align="middle">
+              <Col>
+                <ButtonList />
+              </Col>
+            </Row>
+          </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>GIF Frames Player by <Link href="https://github.com/wr786" target="_blank">wr786</Link> </Footer>
       </Layout>

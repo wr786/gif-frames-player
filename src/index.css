@@ -1,9 +1,21 @@
 .site-layout-content {
   min-height: 280px;
   padding: 24px;
-  background: #fff;
+  /* background: #fff; */
 }
 
 .white-text {
   color: #fff;
+}
+
+.icons-list {
+  padding: 1em;
+}
+
+.my-button {
+  margin: 0.2em;
+}
+
+body {
+  background-color: #f0f2f5;
 }
