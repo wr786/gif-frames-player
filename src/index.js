@@ -6,7 +6,7 @@ import { Image, Button, Space } from 'antd';
 import { Layout, Menu, Breadcrumb } from 'antd';
 import { Typography } from 'antd';
 import { Tooltip } from 'antd';
-import { LeftOutlined, RightOutlined, CaretRightOutlined } from '@ant-design/icons';
+import { LeftOutlined, RightOutlined, CaretRightOutlined, PauseOutlined } from '@ant-design/icons';
 import { Row, Col } from 'antd';
 
 const { Header, Content, Footer } = Layout;
@@ -26,7 +26,14 @@ class RecButton extends React.Component {
   render() {
     return (
       <Tooltip title={this.props.title}>
-        <Button className="my-button" type="primary" shape="circle" icon={this.props.icon} style={this.props.style} />
+        <Button 
+          className = "my-button" 
+          type = "primary" 
+          shape = "circle" 
+          icon = {this.props.icon} 
+          style = {this.props.style} 
+          onClick = {() => this.props.onClick()}
+        />
       </Tooltip>
     )
   }
@@ -34,19 +41,28 @@ class RecButton extends React.Component {
 
 class ButtonList extends React.Component {
   render() {
+    let playIcon = <CaretRightOutlined />;
+    let playTitle = "Play";
+    if(this.props.isPlaying) {
+      playIcon = <PauseOutlined />
+      playTitle = "Pause";
+    }
     return (
       <div className="icons-list">
         <RecButton 
-          title="Prev Frame" 
-          icon={<LeftOutlined />}
+          title = "Prev Frame" 
+          icon = {<LeftOutlined />}
+          onClick = {() => this.props.prev_frame()}
         />
         <RecButton 
-          title="Play" 
-          icon={<CaretRightOutlined />}
+          title = {playTitle} 
+          icon = {playIcon}
+          onClick = {() => this.props.play()}
         />
         <RecButton 
-          title="Next Frame" 
-          icon={<RightOutlined />}
+          title = "Next Frame" 
+          icon = {<RightOutlined />}
+          onClick = {() => this.props.next_frame()}
         />
       </div>
     )
@@ -63,7 +79,40 @@ class MainPage extends React.Component {
       imageTotNum: 131,
       imageCurIdx: 1,
       splitChar: '-',
+      isPlaying: false,
     };
+    setInterval(this.update_play, 100);
+  }
+
+  prev_frame = () => {
+    const state = this.state;
+    let imageCurIdx = state.imageCurIdx;
+    let imageTotNum = state.imageTotNum;
+    imageCurIdx = (imageCurIdx - 2 + imageTotNum) % imageTotNum + 1;
+    state.imageCurIdx = imageCurIdx;
+    this.setState(state);
+  }
+
+  next_frame = () => {
+    const state = this.state;
+    let imageCurIdx = state.imageCurIdx;
+    let imageTotNum = state.imageTotNum;
+    imageCurIdx = (imageCurIdx) % imageTotNum + 1;
+    state.imageCurIdx = imageCurIdx;
+    this.setState(state);
+  }
+
+  play = () => {
+    const state = this.state;
+    state.isPlaying = !state.isPlaying;
+    this.setState(state);
+  }
+
+  update_play = () => {
+    const isPlaying = this.state.isPlaying;
+    if(isPlaying) {
+      this.next_frame();
+    }
   }
 
   calculateSRC = () => {
@@ -78,7 +127,7 @@ class MainPage extends React.Component {
 
   render() {
     const src = this.calculateSRC();
-    // console.log(src);
+
     return (
         <Layout className="layout">
         <Header style={{ textAlign: 'center', padding: '0.5em' }}>
@@ -93,7 +142,12 @@ class MainPage extends React.Component {
             </Row>
             <Row type="flex" justify="center" align="middle">
               <Col>
-                <ButtonList />
+                <ButtonList 
+                  prev_frame = {this.prev_frame}
+                  play = {this.play}
+                  next_frame = {this.next_frame}
+                  isPlaying = {this.state.isPlaying}
+                />
               </Col>
             </Row>
           </div>
