@@ -16,7 +16,7 @@ class ImageBox extends React.Component {
   render() { 
     return (
     <Image
-      width={260}
+      width={400}
       src={this.props.src}
     />
   );}
@@ -30,6 +30,7 @@ class RecButton extends React.Component {
           className = "my-button" 
           type = "primary" 
           shape = "circle" 
+          size = "large"
           icon = {this.props.icon} 
           style = {this.props.style} 
           onClick = {() => this.props.onClick()}
