@@ -8,9 +8,13 @@ import { Typography } from 'antd';
 import { Tooltip } from 'antd';
 import { LeftOutlined, RightOutlined, CaretRightOutlined, PauseOutlined } from '@ant-design/icons';
 import { Row, Col } from 'antd';
+import { Badge, Switch } from 'antd';
+import { InputNumber } from 'antd';
 
 const { Header, Content, Footer } = Layout;
 const { Title, Link } = Typography;
+
+
 
 class ImageBox extends React.Component {
   render() { 
@@ -36,6 +40,41 @@ class RecButton extends React.Component {
           onClick = {() => this.props.onClick()}
         />
       </Tooltip>
+    )
+  }
+}
+
+class DigitInput extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      curNum: 1,
+    };
+  }
+
+  on_change = (i) => {
+    const state = this.state;
+    state.curNum = i;
+    this.setState(state);
+  }
+
+  render() {
+    return (
+      <>
+        <InputNumber 
+          min = {1} 
+          max = {this.props.imageTotNum} 
+          defaultValue = {1}
+          onChange = {() => this.on_change(this.value)}
+        />
+        <Button 
+         type = "primary"
+         onClick = {() => this.props.onClick(this.state.curNum)}
+        >
+          Jump!
+        </Button>
+      </>
     )
   }
 }
@@ -126,9 +165,19 @@ class MainPage extends React.Component {
     return src; 
   };
 
+  jumpto = (i) => {
+    // stop the playing to prevent bugs
+    if (this.state.isPlaying) {
+      this.play();
+    }
+    const state = this.state;
+    state.imageCurIdx = i;
+    this.setState(state);
+  }
+
   render() {
     const src = this.calculateSRC();
-
+    
     return (
         <Layout className="layout">
         <Header style={{ textAlign: 'center', padding: '0.5em' }}>
@@ -138,7 +187,9 @@ class MainPage extends React.Component {
           <div className="site-layout-content">
             <Row type="flex" justify="center" align="middle">
               <Col>
-                <ImageBox src={src}/> 
+                <Badge count={this.state.imageCurIdx} overflowCount={999}>
+                  <ImageBox src={src}/> 
+                </Badge>
               </Col>
             </Row>
             <Row type="flex" justify="center" align="middle">
@@ -150,6 +201,12 @@ class MainPage extends React.Component {
                   isPlaying = {this.state.isPlaying}
                 />
               </Col>
+            </Row>
+            <Row type="flex" justify="center" align="middle">
+              <DigitInput 
+                max = {this.state.imageTotNum}
+                onClick = {this.jumpto}
+              />
             </Row>
           </div>
         </Content>
