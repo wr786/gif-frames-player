@@ -66,7 +66,7 @@ class DigitInput extends React.Component {
           min = {1} 
           max = {this.props.imageTotNum} 
           defaultValue = {1}
-          onChange = {() => this.on_change(this.value)}
+          onChange = {this.on_change}
         />
         <Button 
          type = "primary"
