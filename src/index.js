@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css'
+import isMobile from 'ismobilejs';
 import { render } from '@testing-library/react';
 import { Image, Button, Space } from 'antd';
 import { Layout, Menu, Breadcrumb } from 'antd';
@@ -14,13 +15,15 @@ import { InputNumber } from 'antd';
 const { Header, Content, Footer } = Layout;
 const { Title, Link } = Typography;
 
-
+// 针对移动端优化
+const DEVICE = isMobile(window.navigator);
+const ISMOBILE = DEVICE.any;
 
 class ImageBox extends React.Component {
   render() { 
     return (
     <Image
-      width={400}
+      width={ISMOBILE? 240: 400}
       src={this.props.src}
     />
   );}
